@@ -1,0 +1,39 @@
+<h1>Users#show</h1>
+<p>Find me in app/views/users/show.html.erb</p>
+<% if current_user %>
+  <h3><%= current_user.name%></h3><br>
+  <a href=<%=edit_user_path(current_user)%>>Edit Profile</a>
+<% end %> 
+<form action="/secrets"  method="post">
+
+ <input type = 'hidden' name = "authenticity_token" value = "<%=form_authenticity_token%>">
+ <div class="form-group">
+    <label for="content">New Secret</label>
+    <textArea type="text" class="form-control" id="content" placeholder="secret..." name='Content'> </textArea>
+</div>    
+  <button type="submit" class="btn btn-default">Create Secret</button>
+</form>
+
+<div id="secrets">
+  <h3>Secrets</h3>
+   <% @user.secrets.each do |secret| %>    
+    <form action="/secrets/<%= secret.id %>"  method="post">
+
+      <input type = 'hidden' name = "authenticity_token" value = "<%=form_authenticity_token%>">
+       <input type="hidden" name="_method" value="delete">
+      <div class="form-group">
+          <p><%= secret.content %></p>
+          <p><%= secret.likes.size %> likes</p>
+          <button type="submit" class="btn btn-default">Delete Secret</button>
+      </div>         
+    </form>
+  <% end %>
+</div>
+
+<div id="secrets_liked">
+    <h3>Secrets Liked</h3>
+    <% @user.secrets_liked.each do |secret| %> 
+       <p><%= secret.content %></p>
+       <p><%= secret.likes.size %> likes</p>     
+    <% end %>
+</div>
